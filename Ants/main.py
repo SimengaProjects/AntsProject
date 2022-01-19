@@ -7,9 +7,10 @@ WIDTH = 640
 HEIGHT = 640
 FPS = 30
 
+generatorON = 1
 antnum = 100
 size = (3,3)
-interesnum = 3
+interesnum = 10
 homefood = 0
 
 pygame.init()
@@ -21,7 +22,7 @@ clock = pygame.time.Clock()
 class Interespoint:
     def __init__(self,pos):
         self.pos = pos
-        self.food = random.randint(1,30)*1000
+        self.food = random.randint(5,60)*10
 
 def findmin(a):
     min = a[0]
@@ -37,7 +38,7 @@ class Ants:
     def __init__(self, pos):
         self.pos = pos
         self.food = 0
-        self.life = random.randint(150,800)
+        self.life = random.randint(150,400)
         self.gohome = 0;
     def move(self,x,y):
         self.pos[0]+=x
@@ -109,16 +110,18 @@ while RUN:
                     for i in range(0,interesnum):
                         interespoint[i].pos= [random.randint(50,550),random.randint(50,550)]
                 if event.key == pygame.K_d:
-                    if interesnum>1:
+                    if interesnum>0:
                         delpos = random.randint(0,interesnum-1)
                         interespoint.pop(delpos)
                         interesnum-=1
                 if event.key == pygame.K_a:
                     interes = Interespoint([random.randint(50, 550), random.randint(50, 550)])
-                    interespoint.append()
+                    interespoint.append(interes)
                     interesnum+=1
                 if event.key == pygame.K_s:
                     print("InteresNum = ",interesnum,' ')
+                    print("AntNum = ", antnum, ' ')
+                    print("Food in home = ", homefood, ' ')
                 if event.key == pygame.K_w:
                     ant.clear()
                     color.clear()
@@ -126,26 +129,46 @@ while RUN:
                         pos = [random.randint(20, 620), random.randint(50, 620)]
                         ants = Ants(pos)
                         ant.append(ants)
-                        color.append([random.randint(0,255),random.randint(0,255),random.randint(0,255)])
-                        #color.append((255, 255, 255))
-
+                        #color.append([random.randint(0,255),random.randint(0,255),random.randint(0,255)])
+                        color.append((255, 255, 255))
+                if event.key == pygame.K_g:
+                    if generatorON == 0:
+                        generatorON = 1
+                    else:
+                        generatorON = 0
 
     screen.fill([0,0,0])
     i = 0
-    while (i<antnum) and (antnum>1):
-        if ant[i].life > 500:
+    if (generatorON == 1) and (interesnum<1):
+        interes = Interespoint([random.randint(50, 550), random.randint(50, 550)])
+        interespoint.append(interes)
+        interes = Interespoint([random.randint(50, 550), random.randint(50, 550)])
+        interespoint.append(interes)
+        interesnum += 2
+    while (i<antnum) and (ant!=[]):
+        if ant[i].food > 100:
             ant[i].gohome = 1
+            color[i] = (255,20,240)
         if ant[i].life <0:
             antnum-=1
             ant.pop(i)
+            color.pop(i)
         else:
             ant[i].life-=1
 
         i+=1
-    for i in range(0, interesnum):
-        if (random.randint(0, 1000) == 666) and (interesnum > 1):
-            interespoint.pop(i)
-            interesnum -= 1
+    i = 0
+    try:
+        while i<interesnum:
+            if (random.randint(0, 10000) == 666) and (interesnum > 1):
+                interespoint.pop(i)
+                interesnum -= 1
+            if (interespoint[i].food<0):
+                interespoint.pop(i)
+                interesnum -= 1
+            i+=1
+    except:
+        print()
     for i in range(0, interesnum):
         pygame.draw.circle(screen, (100, 0, 0), interespoint[i].pos, 20)
     for i in range(0,antnum):
@@ -157,35 +180,50 @@ while RUN:
             ant[i].pos[1] = 610
         if (ant[i].pos[1] < 10):
             ant[i].pos[1] = 10
-        if (ant[i].gohome == 1) and (dist(ant[i].pos,home)<30):
-            homefood+=ant[i].life
-            ant[i].life = -2
-        r = pygame.Rect(ant[i].pos[0], ant[i].pos[1],size[0],size[1])
-        path = []
-        for j in range(0,interesnum):
-            path.append(dist(ant[i].pos,interespoint[j].pos))
-        near = interespoint[path.index(findmin(path))].pos
-        if findmin(path) < 20:
-            ant[i].life+=1.1
-        nearestinterespoint = [near[0],near[1]]
-        if ant[i].gohome == 0:
-            ant[i].steptoobj(nearestinterespoint)
-        else:
-            ant[i].steptoobj(home)
 
+        r = pygame.Rect(ant[i].pos[0], ant[i].pos[1],size[0],size[1])
+        try:
+            path = []
+            for j in range(0,interesnum):
+                path.append(dist(ant[i].pos,interespoint[j].pos))
+            near = interespoint[path.index(findmin(path))].pos
+            if findmin(path) < 20:
+                ant[i].food+=1
+                interespoint[path.index(findmin(path))].food-=1
+            if ant[i].life<100 and ant[i].food>0:
+                ant[i].food-=1
+                ant[i].life+=5
+            nearestinterespoint = [near[0],near[1]]
+            if ant[i].gohome == 0:
+                ant[i].steptoobj(nearestinterespoint)
+            else:
+                ant[i].steptoobj(home)
+        except:
+            ant[i].steptoobj(home)
+        if (ant[i].gohome == 1) and (dist(ant[i].pos, home) < 30):
+            color[i] = (255, 255, 255)
+
+            if homefood > 100:
+                homefood += ant[i].food - findmin(path)/12
+                ant[i].life += findmin(path)*10
+                ant[i].food = 0
+            else:
+                homefood += ant[i].food
+                ant[i].food = 0
+            ant[i].gohome = 0
         for j in range (0,antnum):
             if i!=j:
                 if ((abs(ant[i].pos[0]-ant[j].pos[0])<size[0]) and (abs(ant[i].pos[1]-ant[j].pos[1])<size[1])):
                     ant[j].move(random.choice((-10,10)),random.choice((-10,10)))
             pygame.draw.rect(screen, color[i], r)
 
-    if homefood>100:
-        homefood-=100
-        newant = Ants([200,200]);
+    if homefood>150:
+        homefood-=150
+        newant = Ants([200,200])
         antnum+=1
         ant.append(newant)
-        color.append((255, 255, 255))
-"""Доделать: истощаемость еды в точках интереса, баланс еды"""
+        color.append((100, 200, 200))
+
     pygame.draw.circle(screen,(0,200,200),home,30)
     pygame.display.flip()
 
