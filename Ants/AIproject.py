@@ -2,9 +2,9 @@ import pygame
 import random
 
 RUN = 1
-WIDTH = 1024
-HEIGHT = 800
-FPS = 60
+WIDTH = 1800
+HEIGHT = 920
+FPS = 144
 
 #initialization of pygame
 pygame.init()
@@ -30,7 +30,7 @@ class Interespoint:
         self.rad = rad
 #Persons
 class Ant:
-    def __init__(self,pos = [random.randint(30,WIDTH-30),random.randint(30,HEIGHT-30)],speed = 3,life=500):
+    def __init__(self,pos = [random.randint(30,WIDTH-30),random.randint(30,HEIGHT-30)],speed = 5,life=1000):
         self.pos = pos
         self.life = life
         self.speed = speed
@@ -82,12 +82,13 @@ if RUN:
     for i in range(0,dannum):
         dan = DangerZone([600,400])
         dans.append(dan)
-    intnum = 70
+    intnum = 300
     internum = intnum
     for i in range(0,intnum):
         interes = Interespoint([random.randint(30,WIDTH-30),random.randint(30,HEIGHT-30)])
         interestes.append(interes)
-    antnum = 3
+    antnum = 5
+    maxantnum = 30
     for i in range(0,antnum):
         ant = Ant([random.randint(30,WIDTH-30),random.randint(30,HEIGHT-30)])
         ants.append((ant))
@@ -142,13 +143,13 @@ while RUN:
             interestes.pop(path.index(findmin(path)))
             intnum-=1
             ants[i].food +=1
-            ants[i].life+=5
+            ants[i].life+=10-ants[i].speed
         for kicking in range(0,antnum):
             if dist(ants[i].pos,ants[kicking].pos)<20 and i!=kicking:
                 kick = [random.choice([-6,6]),random.choice([-6,6])]
                 ants[kicking].move(kick[0],kick[1])
-        if ants[i].food == 20:
-            ants[i].life+=100
+        if ants[i].food >= 12 and antnum<maxantnum:
+            ants[i].life+=round(300/(ants[i].speed+1))
             if ants[i].speed<10 and ants[i].speed>0:
                 chan = random.randint(0,10)
                 if chan == 7:
@@ -157,22 +158,36 @@ while RUN:
                     bonus = -1
                 else:
                     bonus = 0
+            elif ants[i].speed >=10:
+                chan = random.randint(0,10)
+                if chan == 6:
+                    bonus = -1
+            elif ants[i].speed<=0:
+                chan = random.randint(0,10)
+                if chan == 7:
+                    bonus = 1
+                bonus = 0
+            else:
+                bonus = 0
             ant = Ant(ants[i].pos[:],ants[i].speed+bonus)
             ants.append((ant))
             antnum+=1
-            ants[i].food-=20
+            ants[i].food-=12
     i = 0
     while (i < antnum) and (ants != []):
         if ants[i].life < 0:
             maxkk = int(ants[i].food/2)
             for kk in range(0,maxkk):
-                interes = Interespoint(ants[i].pos[:])
+                newfoodpos = ants[i].pos[:]
+                newfoodpos[0]+=random.randint(-4,4)
+                newfoodpos[1]+= random.randint(-4, 4)
+                interes = Interespoint(newfoodpos)
                 interestes.append(interes)
                 intnum += 1
             antnum -= 1
             ants.pop(i)
         else:
-            ants[i].life -= 1
+            ants[i].life -= ants[i].speed+1
         i+=1
 
     if intnum == 1:
