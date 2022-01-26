@@ -209,7 +209,7 @@ while RUN:
             ant[i].steptoobj(home)
         try:
             if (ant[i].gohome == 1) and (dist(ant[i].pos, home) < 30):
-                color[i] = (255, 255, 255)
+                color[i] = (100, 240, 67)
 
                 if homefood > 100:
                     homefood += ant[i].food - findmin(path)/12
