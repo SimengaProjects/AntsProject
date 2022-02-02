@@ -39,7 +39,7 @@ def findmaxindex(a):
 def dist(first,second):
     return( round((((first[1]-second[1])**2+(first[0]-second[0])**2)**0.5)*100)/100 )
 
-objCount = 1
+objCount = 0
 objects = []
 
 class Obj:
@@ -54,15 +54,27 @@ class Obj:
     def move(self):
         self.pos[0]+=self.speed[0]
         self.pos[1]+=self.speed[1]
+    def steptoobj(self,obj):
+        if self.pos[0]>obj[0]:
+            x = 1
+        else: x = -1
+        if self.pos[1]>obj[1]:
+            y = 1
+        else: y = -1
+        self.speed[0]-=x
+        self.speed[1]-=y
+
 
 for i in range (0,objCount):
     x = random.randint(50,WIDTH-50)
-    y = random.randint(50,HEIGHT-50)
+    y  = random.randint(50,HEIGHT-50)
     color = [random.randint(0,255),random.randint(0,255),random.randint(0,255)]
     pos = [x,y]
-    newObject = Obj(pos,-random.choice([0,1,-1]),color)
+    newObject = Obj(pos,1,color)
     objects.append(newObject)
-
+newObj = Obj()
+newObj.type = -1
+objCount+=1
 
 while RUN:
     clock.tick(FPS)
@@ -76,7 +88,8 @@ while RUN:
                 objects.append(new)
                 objCount += 1
             if event.button == 2:
-                new = Obj(list(event.pos),0, [0, 255, 0])
+                new = Obj(list(event.pos), 1, [255, 0, 0])
+                new.speed = [random.randint(0,30),random.randint(0,30)]
                 objects.append(new)
                 objCount += 1
             if event.button == 3:
@@ -88,14 +101,6 @@ while RUN:
                     print("___")
                 if event.key == pygame.K_d:
                     print("d")
-                    for i in objects:
-                        i.type = random.choice([-1,0,1])
-                        if i.type == 1:
-                            i.color = [255,0,0]
-                        if i.type == -1:
-                            i.color = [0,255,0]
-                        if i.type == 0:
-                            i.color = [0,0,255]
                 if event.key == pygame.K_a:
                     print("a")
                     objCount = 0
@@ -111,40 +116,14 @@ while RUN:
 
     screen.fill([0,0,0])
     for i in objects:
-        if i.pos[0]>WIDTH-50:
-            i.pos[0] = WIDTH-50
-        if i.pos[0]<50:
-            i.pos[0] = 50
-        if i.pos[1]>HEIGHT-50:
-            i.pos[1] = HEIGHT-50
-        if i.pos[1]<50:
-            i.pos[1] = 50
         for j in objects:
-            if i!=j and dist(i.pos,j.pos)>i.rad:
-                if i.type == -1 and j.type==1:
-                        i.speed[0] += -(i.pos[0]-j.pos[0])/(abs(i.pos[0]-j.pos[0])+1)/dist(i.pos,j.pos)*3
-                        i.speed[1] += -(i.pos[1] - j.pos[1]) / (abs(i.pos[1] - j.pos[1])+1)/dist(i.pos,j.pos)*3
-                if i.type == j.type != 0:
-                        i.speed[0] += (i.pos[0]-j.pos[0])/((abs(i.pos[0]-j.pos[0]))+1)/dist(i.pos,j.pos)
-                        i.speed[1] += (i.pos[1] - j.pos[1]) / ((abs(i.pos[1] - j.pos[1]))+1)/dist(i.pos,j.pos)
-                if i.type == 1 and j.type == 0:
-                    i.speed[0] += -(i.pos[0] - j.pos[0]) / ((abs(i.pos[0] - j.pos[0])) + 1) / (dist(i.pos, j.pos)) *1.1
-                    i.speed[1] += -(i.pos[1] - j.pos[1]) / ((abs(i.pos[1] - j.pos[1])) + 1) / (dist(i.pos, j.pos)) *1.1
-            if i != j and dist(i.pos, j.pos) < i.rad - 1:
-                i.pos[0] += random.choice([i.rad,-i.rad])
-                i.pos[1] += random.choice([i.rad, -i.rad])
-                i.speed = [0,0]
-            if i.speed[0]<-10:
-                i.speed[0] = -10
-            if i.speed[0]>10:
-                i.speed[0] = 10
-            if i.speed[1]<-10:
-                i.speed[1] = -10
-            if i.speed[1]>10:
-                i.speed[1] = 10
-    for i in objects:
-        i.move()
-        i.drow()
+            if j!=i:
+                if j.type == -1 and i.type == 1:
+                    i.steptoobj(j.pos)
+
+    for o in objects:
+        o.drow()
+        o.move()
     pygame.display.flip()
 
 pygame.quit()
