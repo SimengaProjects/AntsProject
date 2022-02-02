@@ -20,8 +20,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="d6fa9e46-d47b-4456-814b-60c5aab81004" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/gravi.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/plants.py" beforeDir="false" afterPath="$PROJECT_DIR$/plants.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test.py" beforeDir="false" afterPath="$PROJECT_DIR$/test.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -42,7 +43,7 @@
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
   </component>
-  <component name="RunManager" selected="Python.life">
+  <component name="RunManager" selected="Python.gravi">
     <configuration name="AIproject" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="Ants" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -65,7 +66,7 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="feromoneproject" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+    <configuration name="gravi" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="Ants" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -78,7 +79,7 @@
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/feromoneproject.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/gravi.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -155,11 +156,11 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Python.gravi" />
+        <item itemvalue="Python.test" />
         <item itemvalue="Python.life" />
         <item itemvalue="Python.AIproject" />
         <item itemvalue="Python.main" />
-        <item itemvalue="Python.feromoneproject" />
-        <item itemvalue="Python.test" />
       </list>
     </recent_temporary>
   </component>
@@ -175,6 +176,8 @@
       <updated>1642541897534</updated>
       <workItem from="1642541907925" duration="37747000" />
       <workItem from="1643221863389" duration="6793000" />
+      <workItem from="1643647227400" duration="600000" />
+      <workItem from="1643797410001" duration="5880000" />
     </task>
     <servers />
   </component>
@@ -198,22 +201,22 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="729" y="322" key="#com.intellij.fileTypes.FileTypeChooser/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1643221901687" />
-    <state width="1877" height="283" key="GridCell.Tab.0.bottom" timestamp="1643229594267">
+    <state width="1877" height="283" key="GridCell.Tab.0.bottom" timestamp="1643804331963">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1877" height="283" key="GridCell.Tab.0.bottom/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1643229594267" />
-    <state width="1877" height="283" key="GridCell.Tab.0.center" timestamp="1643229594266">
+    <state width="1877" height="283" key="GridCell.Tab.0.bottom/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1643804331963" />
+    <state width="1877" height="283" key="GridCell.Tab.0.center" timestamp="1643804331963">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1877" height="283" key="GridCell.Tab.0.center/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1643229594266" />
-    <state width="1877" height="283" key="GridCell.Tab.0.left" timestamp="1643229594266">
+    <state width="1877" height="283" key="GridCell.Tab.0.center/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1643804331963" />
+    <state width="1877" height="283" key="GridCell.Tab.0.left" timestamp="1643804331963">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1877" height="283" key="GridCell.Tab.0.left/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1643229594266" />
-    <state width="1877" height="283" key="GridCell.Tab.0.right" timestamp="1643229594266">
+    <state width="1877" height="283" key="GridCell.Tab.0.left/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1643804331963" />
+    <state width="1877" height="283" key="GridCell.Tab.0.right" timestamp="1643804331963">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1877" height="283" key="GridCell.Tab.0.right/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1643229594266" />
+    <state width="1877" height="283" key="GridCell.Tab.0.right/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1643804331963" />
     <state x="623" y="225" width="672" height="678" key="search.everywhere.popup" timestamp="1642623740962">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
@@ -222,8 +225,9 @@
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/Ants$plants.coverage" NAME="plants Coverage Results" MODIFIED="1643229154813" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/Ants$AIproject.coverage" NAME="AIproject Coverage Results" MODIFIED="1642686067145" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/Ants$gravi.coverage" NAME="gravi Coverage Results" MODIFIED="1643804331957" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/Ants$main.coverage" NAME="main Coverage Results" MODIFIED="1642685951079" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/Ants$feromoneproject.coverage" NAME="feromoneproject Coverage Results" MODIFIED="1642685505464" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
-    <SUITE FILE_PATH="coverage/Ants$test.coverage" NAME="test Coverage Results" MODIFIED="1642685145847" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/Ants$test.coverage" NAME="test Coverage Results" MODIFIED="1643800884743" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
   </component>
 </project>
