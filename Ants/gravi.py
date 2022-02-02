@@ -4,7 +4,7 @@ import random
 RUN = 1
 WIDTH = 800
 HEIGHT = 800
-FPS = 144
+FPS = 30
 
 #initialization of pygame
 pygame.init()
@@ -39,7 +39,7 @@ def findmaxindex(a):
 def dist(first,second):
     return( round((((first[1]-second[1])**2+(first[0]-second[0])**2)**0.5)*100)/100 )
 
-objCount = 65
+objCount = 1
 objects = []
 
 class Obj:
@@ -72,11 +72,17 @@ while RUN:
             RUN = False
         if event.type == pygame.MOUSEBUTTONDOWN:
             if event.button == 1:
-                print(1)
+                new = Obj(list(event.pos),1,[255,0,0])
+                objects.append(new)
+                objCount += 1
             if event.button == 2:
-                print(2)
+                new = Obj(list(event.pos),0, [0, 255, 0])
+                objects.append(new)
+                objCount += 1
             if event.button == 3:
-                print("3")
+                new = Obj(list(event.pos), -1, [0, 0, 255])
+                objects.append(new)
+                objCount+=1
         if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_SPACE:
                     print("___")
@@ -90,9 +96,10 @@ while RUN:
                             i.color = [0,255,0]
                         if i.type == 0:
                             i.color = [0,0,255]
-                        i.rad = 3+i.type
                 if event.key == pygame.K_a:
                     print("a")
+                    objCount = 0
+                    objects.clear()
 
                 if event.key == pygame.K_s:
                     print("InteresNum = ",' ')
@@ -114,24 +121,15 @@ while RUN:
             i.pos[1] = 50
         for j in objects:
             if i!=j and dist(i.pos,j.pos)>i.rad:
-                if i.type != j.type !=0:
-                    try:
-                        i.speed[0] += -(i.pos[0]-j.pos[0])/abs(i.pos[0]-j.pos[0])/dist(i.pos,j.pos)
-                    except:
-                        print(0)
-                    try:
-                        i.speed[1] += -(i.pos[1] - j.pos[1]) / abs(i.pos[1] - j.pos[1])/dist(i.pos,j.pos)
-                    except:
-                        print(1)
+                if i.type == -1 and j.type==1:
+                        i.speed[0] += -(i.pos[0]-j.pos[0])/(abs(i.pos[0]-j.pos[0])+1)/dist(i.pos,j.pos)*3
+                        i.speed[1] += -(i.pos[1] - j.pos[1]) / (abs(i.pos[1] - j.pos[1])+1)/dist(i.pos,j.pos)*3
                 if i.type == j.type != 0:
-                    try:
-                        i.speed[0] += (i.pos[0]-j.pos[0])/(abs(i.pos[0]-j.pos[0]))/dist(i.pos,j.pos)
-                    except:
-                        print(2)
-                    try:
-                        i.speed[1] += (i.pos[1] - j.pos[1]) / (abs(i.pos[1] - j.pos[1]))/dist(i.pos,j.pos)
-                    except:
-                        print(3)
+                        i.speed[0] += (i.pos[0]-j.pos[0])/((abs(i.pos[0]-j.pos[0]))+1)/dist(i.pos,j.pos)
+                        i.speed[1] += (i.pos[1] - j.pos[1]) / ((abs(i.pos[1] - j.pos[1]))+1)/dist(i.pos,j.pos)
+                if i.type == 1 and j.type == 0:
+                    i.speed[0] += -(i.pos[0] - j.pos[0]) / ((abs(i.pos[0] - j.pos[0])) + 1) / (dist(i.pos, j.pos)) *1.1
+                    i.speed[1] += -(i.pos[1] - j.pos[1]) / ((abs(i.pos[1] - j.pos[1])) + 1) / (dist(i.pos, j.pos)) *1.1
             if i != j and dist(i.pos, j.pos) < i.rad - 1:
                 i.pos[0] += random.choice([i.rad,-i.rad])
                 i.pos[1] += random.choice([i.rad, -i.rad])
