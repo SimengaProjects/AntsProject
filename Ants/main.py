@@ -21,12 +21,25 @@ pygame.display.set_caption("My Game")
 clock = pygame.time.Clock()
 
 class Interespoint:
-    def __init__(self,pos,chit=0):
+    def __init__(self,pos,speed = [0.3,0],chit=0):
         self.pos = pos
+        self.speed = speed
         if chit == 0:
             self.food = random.randint(5,60)*10
         else:
             self.food = random.randint(50, 60) * 1000
+    def Move(self):
+        if self.pos[0]>50 and self.pos[0]<WIDTH-50:
+            self.pos[0]+=self.speed[0]
+        else:
+            self.speed[0]=-self.speed[0]
+            self.pos[0]+=3*self.speed[0]
+        if self.pos[1]>50 and self.pos[1]<HEIGHT-50:
+            self.pos[1]+=self.speed[1]
+        else:
+            self.speed[1]=-self.speed[1]
+            self.pos[1]+=3*self.speed[1]
+
 
 def findmin(a):
     min = a[0]
@@ -39,28 +52,44 @@ def dist(first,second):
     return( round((((first[1]-second[1])**2+(first[0]-second[0])**2)**0.5)*100)/100 )
 
 class Ants:
-    def __init__(self, pos):
+    def __init__(self, pos,speed = 1):
         self.pos = pos
         self.food = 0
         self.life = random.randint(150,400)
         self.gohome = 0;
+        self.speed = speed
     def move(self,x,y):
         self.pos[0]+=x
         self.pos[1]+=y
     def steptoobj(self,objpos):
-        if objpos[0]<self.pos[0]:
-            gox = -1
-        elif objpos[0] > self.pos[0] :
-            gox = 1
-        else:
-            gox = 0;
-        if objpos[1]<self.pos[1]:
-            goy = -1
-        elif objpos[1] > self.pos[1] :
-            goy = 1
-        else:
-            goy = 0;
-        self.move(gox,goy)
+        if abs(self.pos[0] - objpos[0]) > abs(self.pos[1] - objpos[1]):
+            if objpos[0] < self.pos[0]:
+                gox = -self.speed
+            elif objpos[0] > self.pos[0]:
+                gox = self.speed
+            else:
+                gox = 0;
+            if objpos[1] < self.pos[1]:
+                goy = -self.speed * abs(self.pos[1] - objpos[1]) / abs(self.pos[0] - objpos[0])
+            elif objpos[1] > self.pos[1]:
+                goy = self.speed * abs(self.pos[1] - objpos[1]) / abs(self.pos[0] - objpos[0])
+            else:
+                goy = 0;
+            self.move(gox, goy)
+        elif abs(self.pos[0] - objpos[0]) < abs(self.pos[1] - objpos[1]):
+            if objpos[0] < self.pos[0]:
+                gox = -self.speed * abs(self.pos[0] - objpos[0]) / abs(self.pos[1] - objpos[1])
+            elif objpos[0] > self.pos[0]:
+                gox = self.speed * abs(self.pos[0] - objpos[0]) / abs(self.pos[1] - objpos[1])
+            else:
+                gox = 0
+            if objpos[1] < self.pos[1]:
+                goy = -self.speed
+            elif objpos[1] > self.pos[1]:
+                goy = self.speed
+            else:
+                goy = 0;
+            self.move(gox, goy)
     def randstep(self):
         gox = random.choice((-1,1))
         goy = random.choice((-1, 1))
@@ -83,7 +112,7 @@ for i in range(0,antnum):
 #create food
 interespoint = []
 for i in range(0,interesnum):
-    interes = Interespoint([random.randint(50,WIDTH-50),random.randint(50,HEIGHT-50)])
+    interes = Interespoint([random.randint(50,WIDTH-50),random.randint(50,HEIGHT-50)],[random.randint(-99,99)/100,random.randint(-99,99)/100])
     interespoint.append(interes)
 
 
@@ -96,11 +125,11 @@ while RUN:
             RUN = False
         if event.type == pygame.MOUSEBUTTONDOWN:
             if event.button == 1:
-                interes = Interespoint(event.pos)
+                interes = Interespoint(list(event.pos),[random.randint(-150,150)/100,random.randint(-120,114)/100])
                 interespoint.append(interes)
                 interesnum += 1
             if event.button == 2:
-                interes = Interespoint(event.pos,1)
+                interes = Interespoint(list(event.pos),[random.randint(-150,150)/100,random.randint(-120,114)/100],1)
                 interespoint.append(interes)
                 interesnum += 1
             if event.button == 3:
@@ -117,6 +146,7 @@ while RUN:
                 if event.key == pygame.K_SPACE:
                     for i in range(0,interesnum):
                         interespoint[i].pos= [random.randint(50,550),random.randint(50,550)]
+                        interespoint[i].speed = [0,0]
                 if event.key == pygame.K_d:
                     if interesnum>0:
                         delpos = random.randint(0,interesnum-1)
@@ -149,7 +179,7 @@ while RUN:
     i = 0
     if (generatorON == 1) and (interesnum<1):
         for k in range(0,gennum):
-            interes = Interespoint([random.randint(50, WIDTH-50), random.randint(50, HEIGHT-50)])
+            interes = Interespoint([random.randint(50, WIDTH-50), random.randint(50, HEIGHT-50)],[random.randint(-90,98)/100,random.randint(-94,101)/100])
             interespoint.append(interes)
         interesnum += gennum
     while (i<antnum) and (ant!=[]):
@@ -161,7 +191,7 @@ while RUN:
             ant.pop(i)
             color.pop(i)
         else:
-            ant[i].life-=1
+            ant[i].life-=0.4
 
         i+=1
     i = 0
@@ -177,6 +207,7 @@ while RUN:
     except:
         print()
     for i in range(0, interesnum):
+        interespoint[i].Move()
         pygame.draw.circle(screen, (100, 0, 0), interespoint[i].pos, 20)
     for i in range(0,antnum):
         if (ant[i].pos[0] > WIDTH-10):
