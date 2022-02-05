@@ -5,14 +5,9 @@ import math
 RUN = 1
 WIDTH = 1024
 HEIGHT = 800
-FPS = 50
-
-generatorON = 1
-antnum = 10
-size = (3,3)
-interesnum = 10
-homefood = 0
-gennum = 5
+FPS = 30
+ticks = 0
+secunds = 0
 
 pygame.init()
 pygame.mixer.init()  # для звука
@@ -52,15 +47,28 @@ def dist(first,second):
     return( round((((first[1]-second[1])**2+(first[0]-second[0])**2)**0.5)*100)/100 )
 
 class Ants:
-    def __init__(self, pos,speed = 1):
+    def __init__(self, pos,nav =0.7,ymod = 1,speed = 1):
+        self.steps = [0,0]
+        self.color = [200,200,200]
         self.pos = pos
-        self.food = 0
-        self.life = random.randint(150,400)
-        self.gohome = 0;
         self.speed = speed
+        self.rad = 2
+        self.nav = nav
+        self.ymod = ymod
+    def drow(self):
+        pygame.draw.circle(screen, self.color, self.pos, self.rad)
     def move(self,x,y):
-        self.pos[0]+=x
-        self.pos[1]+=y
+        self.pos[0]= self.pos[0]+x
+        self.pos[1]=self.pos[1]+y
+    def randnavchange(self):
+        self.nav += random.randint(-666, 666) / 100000
+        if self.nav == 1 or self.nav == -1:
+            self.ymod = -self.ymod
+    def navchange(self,x):
+        self.nav[0] = x
+    def movetonav(self):
+        self.pos[0]+=self.nav*self.speed
+        self.pos[1]+=(1-(self.nav)**2)**0.5 * self.speed * self.ymod
     def steptoobj(self,objpos):
         if abs(self.pos[0]-objpos[0])>abs(self.pos[1]-objpos[1]):
             if objpos[0]<self.pos[0]:
@@ -94,13 +102,30 @@ class Ants:
         gox = random.choice((-1,1))
         goy = random.choice((-1, 1))
         self.move(gox, goy)
-maxsp = 0
-s = 1
-c = 3
-a = Ants([50,50],3)
-b = Interespoint([500,500],[0,0],0)
-ymod = HEIGHT/WIDTH
-lastd = a.pos
+
+def CreateAnt(colony,pos,speed = 1):
+    a = Ants(pos,speed)
+    colony.append(a)
+def Scream(colony,screamer,state):
+    for i in colony:
+        if dist(i.pos,screamer.pos)<screamrange:
+            if screamer.steps[state] < i.steps[state]:
+                i.steps[state] = screamer.steps[state]
+                # make moving changer to screamer
+
+
+#Var's
+if RUN:
+    home = [WIDTH/4,HEIGHT/3]
+    screamrange = 50
+    antnum = 55
+    ants = []
+    for i in range(0,antnum):
+        cord = home[:]
+        CreateAnt(ants,cord)
+
+
+
 #Game cicle
 while RUN:
     clock.tick(FPS)
@@ -128,25 +153,18 @@ while RUN:
                 if event.key == pygame.K_w:
                     print("w")
                 if event.key == pygame.K_g:
-                    if generatorON == 0:
-                        generatorON = 1
-                    else:
-                        generatorON = 0
+                    print("g")
 
     screen.fill([0,0,0])
-    d = dist(a.pos,b.pos)
-    a.steptoobj(b.pos)
-    b.pos[0]-=s
-    b.pos[1] += c
-    if dist(a.pos,lastd)>maxsp:
-        maxsp = dist(a.pos,lastd)
-    lastd =a.pos[:]
-    if b.pos[0] > 600 or b.pos[0]<50:
-        s = -s
-    if b.pos[1] > 600 or b.pos[1]<50:
-        c = -c
-    pygame.draw.circle(screen,(255,0,0),a.pos,10)
-    pygame.draw.circle(screen, (255, 0, 255), b.pos, 10)
+
+    for i in ants:
+        i.randstep()
+        i.drow()
     pygame.display.flip()
-print(maxsp)
+    ticks+=1
+    if ticks == FPS:
+        secunds+=1
+        ticks = 0
+
+print("time: ",secunds)
 pygame.quit()

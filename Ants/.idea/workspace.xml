@@ -21,7 +21,6 @@
   <component name="ChangeListManager">
     <list default="true" id="d6fa9e46-d47b-4456-814b-60c5aab81004" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/test.py" beforeDir="false" afterPath="$PROJECT_DIR$/test.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -179,7 +178,7 @@
       <workItem from="1643647227400" duration="600000" />
       <workItem from="1643797410001" duration="11821000" />
       <workItem from="1644074236415" duration="994000" />
-      <workItem from="1644084099431" duration="6042000" />
+      <workItem from="1644084099431" duration="8887000" />
     </task>
     <servers />
   </component>
@@ -203,22 +202,22 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="729" y="322" key="#com.intellij.fileTypes.FileTypeChooser/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1643221901687" />
-    <state width="1877" height="283" key="GridCell.Tab.0.bottom" timestamp="1644090138170">
+    <state width="1877" height="283" key="GridCell.Tab.0.bottom" timestamp="1644091822595">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1877" height="283" key="GridCell.Tab.0.bottom/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1644090138170" />
-    <state width="1877" height="283" key="GridCell.Tab.0.center" timestamp="1644090138170">
+    <state width="1877" height="283" key="GridCell.Tab.0.bottom/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1644091822595" />
+    <state width="1877" height="283" key="GridCell.Tab.0.center" timestamp="1644091822594">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1877" height="283" key="GridCell.Tab.0.center/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1644090138170" />
-    <state width="1877" height="283" key="GridCell.Tab.0.left" timestamp="1644090138170">
+    <state width="1877" height="283" key="GridCell.Tab.0.center/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1644091822594" />
+    <state width="1877" height="283" key="GridCell.Tab.0.left" timestamp="1644091822594">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1877" height="283" key="GridCell.Tab.0.left/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1644090138170" />
-    <state width="1877" height="283" key="GridCell.Tab.0.right" timestamp="1644090138170">
+    <state width="1877" height="283" key="GridCell.Tab.0.left/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1644091822594" />
+    <state width="1877" height="283" key="GridCell.Tab.0.right" timestamp="1644091822594">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1877" height="283" key="GridCell.Tab.0.right/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1644090138170" />
+    <state width="1877" height="283" key="GridCell.Tab.0.right/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1644091822594" />
     <state x="623" y="225" width="672" height="678" key="search.everywhere.popup" timestamp="1642623740962">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
@@ -232,6 +231,6 @@
     <SUITE FILE_PATH="coverage/Ants$feromoneproject.coverage" NAME="feromoneproject Coverage Results" MODIFIED="1642685505464" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/Ants$circle.coverage" NAME="circle Coverage Results" MODIFIED="1643810198595" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/Ants$antalg_1.coverage" NAME="antalg_1 Coverage Results" MODIFIED="1644075202587" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
-    <SUITE FILE_PATH="coverage/Ants$test.coverage" NAME="test Coverage Results" MODIFIED="1644090149103" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/Ants$test.coverage" NAME="test Coverage Results" MODIFIED="1644091822586" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
   </component>
 </project>
