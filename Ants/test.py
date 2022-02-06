@@ -5,7 +5,7 @@ import math
 RUN = 1
 WIDTH = 1024
 HEIGHT = 720
-FPS = 30
+FPS = 40
 ticks = 0
 secunds = 0
 
@@ -19,8 +19,9 @@ clock = pygame.time.Clock()
 #add Home and doof-eating sistems, add Quin and aim's changing.
 
 class Interespoint:
-    def __init__(self,pos,speed = [0,0],chit=0):
+    def __init__(self,pos,aimpoint = 1,speed = [0,0],chit=0):
         self.pos = pos
+        self.aimpoint = aimpoint
         self.speed = speed
         if chit == 0:
             self.food = random.randint(5,60)*10
@@ -65,13 +66,14 @@ class Ants:
         self.rad = 2
         self.nav = nav
         self.ymod = ymod
+        self.aim = 1
     def drow(self):
         pygame.draw.circle(screen, self.color, self.pos, self.rad)
     def move(self,x,y):
         self.pos[0]= self.pos[0]+x
         self.pos[1]=self.pos[1]+y
     def randnavchange(self):
-        self.nav += random.randint(-3000,3000)/100000
+        self.nav += random.randint(-3000,3000)/50000
         if self.nav>1:
             self.nav = 1
         if self.nav <-1:
@@ -132,25 +134,27 @@ def CreateAnt(colony,pos,nav = 0.7,ymod = 1,speed = 1):
     colony.append(a)
 def Scream(colony,screamer,state):
     for i in colony:
-        if screamer != i and 1 and dist(i.pos,screamer.pos)<screamrange and screamer.steps[state]+screamrange < i.steps[state]:
+        if screamer != i and dist(i.pos,screamer.pos)<screamrange and screamer.steps[state]+screamrange < i.steps[state]:
                     i.steps[state] = screamer.steps[state]+screamrange
-                    i.takenav(screamer.pos)
-                    pygame.draw.line(screen,(80,5,180),screamer.pos,i.pos)
+                    if i.aim == state:
+                        i.takenav(screamer.pos)
+                        pygame.draw.line(screen,(100*state,10,250-100*state),screamer.pos,i.pos)
 
 
 #Var's
 if RUN:
+    fmb = 0
     screams = []
     l = []
     ints = []
-    home = [WIDTH/2,HEIGHT/2]
-    screamrange = 40
-    interesnum = 3
+    home = Interespoint([WIDTH/2,HEIGHT/2],0)
+    interesnum = 8
     antnum = 250
+    screamrange = 1/(80*antnum/(WIDTH*HEIGHT))
+    print(screamrange)
     ants = []
     for i in range(0,antnum):
-        cord = home[:]
-        CreateAnt(ants,[random.randint(50,WIDTH-50),random.randint(50,HEIGHT-50)],round(random.randint(-50,50)/50*1000)/1000*random.choice([-1,1]),random.choice([1,-1]),5)
+        CreateAnt(ants,[random.randint(50,WIDTH-50),random.randint(50,HEIGHT-50)],round(random.randint(-50,50)/50*1000)/1000*random.choice([-1,1]),random.choice([1,-1]),random.randint(2,6))
     for i in range(0,interesnum):
         interes = Interespoint([random.randint(50,WIDTH-50),random.randint(50,HEIGHT-50)])
         ints.append(interes)
@@ -166,10 +170,31 @@ while RUN:
         if event.type == pygame.MOUSEBUTTONDOWN:
             if event.button == 1:
                 print(1)
+                counter = 0
+                for i in ants:
+                    if dist(i.pos,list(event.pos))<100:
+                        counter+=1
+                print(counter)
+                fmb = list(event.pos)
+                fmbrad = 100
             if event.button == 2:
                 print(2)
+                counter = 0
+                for i in ants:
+                    if dist(i.pos,list(event.pos))<50:
+                        counter+=1
+                print(counter)
+                fmb = list(event.pos)
+                fmbrad = 50
             if event.button == 3:
                 print(3)
+                counter = 0
+                for i in ants:
+                    if dist(i.pos,list(event.pos))<10:
+                        counter+=1
+                print(counter)
+                fmb = list(event.pos)
+                fmbrad = 10
         if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_d:
                     print("d")
@@ -185,10 +210,15 @@ while RUN:
                     print("g")
 
     screen.fill([0,0,0])
+    if fmb != 0:
+        pygame.draw.circle(screen, (255, 255, 0), fmb, fmbrad)
+        fmb = 0
+        fmbrad = 0
     for i in ints:
         pygame.draw.circle(screen, (0, 200, 200), i.pos, 10)
+    pygame.draw.circle(screen,(50,255,50),home.pos,15)
     for i in ants:
-        Scream(ants,i,1)
+        Scream(ants,i,random.choice([0,1]))
         i.movetonav()
         i.steps[0]+=1
         i.steps[1]+=1
@@ -201,8 +231,23 @@ while RUN:
         for j in ints:
             if dist(i.pos,j.pos)<10:
                 i.steps[1] = 0
-                i.color = (255,0,0)
+                if  i.aim == 1:
+                    i.aim = 0
+                    i.color = (255,0,0)
+                    i.nav=-i.nav
+                    i.ymod*=-1
+        if dist(i.pos,home.pos)<15:
+            i.steps[0] = 0
+            if  i.aim == 0:
+                i.aim = 1
+                i.color = (0,0,255)
+                i.nav = -i.nav
+                i.ymod *= -1
         i.drow()
+    pygame.draw.line(screen,(200,20,100),(40,40),(WIDTH-40,40))
+    pygame.draw.line(screen, (200, 20, 100), (WIDTH-40, 40), (WIDTH - 40, HEIGHT-40))
+    pygame.draw.line(screen, (200, 20, 100), (WIDTH-40, HEIGHT-40), (40, HEIGHT-40))
+    pygame.draw.line(screen, (200, 20, 100), (40, 40), ( 40, HEIGHT-40))
     pygame.display.flip()
     ticks+=1
     if ticks == FPS:
