@@ -2,8 +2,8 @@ import pygame
 import random
 
 RUN = 1
-WIDTH = 800
-HEIGHT = 800
+WIDTH = 1200
+HEIGHT = 720
 FPS = 30
 
 #initialization of pygame

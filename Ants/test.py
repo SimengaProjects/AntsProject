@@ -1,46 +1,27 @@
 import random
-import pygame
+import pygame as pg
 import math
+import time
 
 RUN = 1
 WIDTH = 1280
-HEIGHT = 690
-FPS = 15
+HEIGHT = 950
+FPS = 60
 ticks = 0
 secunds = 0
+GRAPH = [[0,0]]
 
-pygame.init()
-pygame.mixer.init()  # для звука
-screen = pygame.display.set_mode((WIDTH, HEIGHT),pygame.DOUBLEBUF)
-pygame.display.set_caption("My Game")
-clock = pygame.time.Clock()
+pg.init()
+pg.mixer.init()  # для звука
+screen = pg.display.set_mode((WIDTH, HEIGHT),pg.DOUBLEBUF,1)
+scr = pg.display.set_mode((WIDTH, HEIGHT),pg.DOUBLEBUF,1)
+pg.display.set_caption("My Game")
+clock = pg.time.Clock()
 
 screen.set_alpha(None)
 
 ##ToDO:
 #add +Home+ and food-eating sistems, add Quin and +aim's changing+.
-
-class Interespoint:
-    def __init__(self,pos,aimpoint = 1,speed = [0,0],chit=0):
-        self.pos = pos
-        self.aimpoint = aimpoint
-        self.speed = speed
-        if chit == 0:
-            self.food = random.randint(5,60)*10
-        else:
-            self.food = random.randint(50, 60) * 1000
-    def Move(self):
-        if self.pos[0]>50 and self.pos[0]<WIDTH-50:
-            self.pos[0]+=self.speed[0]
-        else:
-            self.speed[0]=-self.speed[0]
-            self.pos[0]+=3*self.speed[0]
-        if self.pos[1]>50 and self.pos[1]<HEIGHT-50:
-            self.pos[1]+=self.speed[1]
-        else:
-            self.speed[1]=-self.speed[1]
-            self.pos[1]+=3*self.speed[1]
-
 
 def findmin(a):
     min = a[0]
@@ -59,220 +40,137 @@ def findcos(v1,v2):
 def dist(first,second):
     return( round((((first[1]-second[1])**2+(first[0]-second[0])**2)**0.5)*100)/100 )
 
-class Ants:
-    def __init__(self, pos,nav =0.7,ymod = 1,speed = 1):
-        self.steps = [0,0]
-        self.color = [200,200,200]
+
+class Creature:
+    def __init__(self,pos = [WIDTH/2,HEIGHT/2],color = [255,255,255],type = 0,rad = 3,food = 100,speed = 1):
         self.pos = pos
+        self.food = food
         self.speed = speed
-        self.rad = 1
-        self.nav = nav
-        self.ymod = ymod
-        self.aim = 1
+        self.ymod = random.choice([-1,1])
+        self.nav = random.randint(-1000,1000)/1000
+        self.rad = rad
+        self.color = color
+        self.type = type
+        self.birthnum = 1
+    def move(self,change):
+        self.pos[0]+=change[0]
+        self.pos[1] += change[1]
+    def randstep(self):
+        self.pos[0] += random.choice([-1, 0, 1])
+        self.pos[1] += random.choice([-1, 0, 1])
     def drow(self):
-        pygame.draw.circle(screen, self.color, self.pos, self.rad)
-    def move(self,x,y):
-        self.pos[0]= self.pos[0]+x
-        self.pos[1]=self.pos[1]+y
+        pg.draw.circle(screen,self.color,self.pos,self.rad)
     def randnavchange(self):
-        self.nav += random.randint(-3000,3000)/250000
+        self.nav += random.randint(-3000,3000)/30000
         if self.nav>1:
             self.nav = 1
         if self.nav <-1:
             self.nav = -1
         if self.nav == 1 or self.nav == -1:
             self.ymod = -self.ymod
-    def navchange(self,x,y):
-        self.nav[0] = x
-        self.ymod = y
-    def takenav(self,objpos):
-        if objpos[1]>self.pos[1]:
-            self.ymod = 1
-        else:
-            self.ymod = -1
-        try:
-            distantion = dist(self.pos,objpos)
-            vector1 = [(-self.pos[0]+objpos[0])/distantion,(-self.pos[1]+objpos[1])/distantion]
-            vector2 = [1,0]
-            self.nav = findcos(vector1,vector2)
-        except:
-            print("TakeNav error!")
     def movetonav(self):
-        self.pos[0]+=self.nav*self.speed
-        self.pos[1]+=(1-(self.nav)**2)**0.5 * self.speed * self.ymod
-    def steptoobj(self,objpos):
-        if abs(self.pos[0]-objpos[0])>abs(self.pos[1]-objpos[1]):
-            if objpos[0]<self.pos[0]:
-                gox = -self.speed *(1-((self.pos[1] - objpos[1])/(self.pos[0] - objpos[0]))**2)**0.5
-            elif objpos[0] > self.pos[0] :
-                gox = self.speed * (1-((self.pos[1] - objpos[1])/(self.pos[0] - objpos[0]))**2)**0.5
-            else:
-                gox = 0;
-            if objpos[1]<self.pos[1]:
-                goy = -self.speed* abs(self.pos[1] - objpos[1])/abs(self.pos[0] - objpos[0])
-            elif objpos[1] > self.pos[1] :
-                goy = self.speed* abs(self.pos[1] - objpos[1])/abs(self.pos[0] - objpos[0])
-            else:
-                goy = 0;
-            self.move(gox,goy)
-        elif abs(self.pos[0] - objpos[0]) < abs(self.pos[1] - objpos[1]):
-            if objpos[0] < self.pos[0]:
-                gox = -self.speed * abs(self.pos[0] - objpos[0])/ abs(self.pos[1] - objpos[1])
-            elif objpos[0] > self.pos[0]:
-                gox = self.speed * abs(self.pos[0] - objpos[0])/ abs(self.pos[1] - objpos[1])
-            else:
-                gox = 0
-            if objpos[1] < self.pos[1]:
-                goy = -self.speed * (1 -(abs(self.pos[0] - objpos[0])/ abs(self.pos[1] - objpos[1]))**2)**0.5
-            elif objpos[1] > self.pos[1]:
-                goy = self.speed * (1 -(abs(self.pos[0] - objpos[0])/ abs(self.pos[1] - objpos[1]))**2)**0.5
-            else:
-                goy = 0
-            self.move(gox, goy)
-    def randstep(self):
-        gox = random.choice((-1,1))
-        goy = random.choice((-1, 1))
-        self.move(gox, goy)
+        self.pos[0] += self.nav * self.speed
+        self.pos[1] += (1 - (self.nav) ** 2) ** 0.5 * self.speed * self.ymod
 
-def CreateAnt(colony,pos,nav = 0.7,ymod = 1,speed = 1):
-    a = Ants(pos,nav,ymod,speed)
-    colony.append(a)
-def Scream(colony,screamer,state):
-    for i in colony:
-        if dist(i.pos,screamer.pos)<screamrange and screamer.steps[state]+screamrange < i.steps[state] and screamer != i :
-                    i.steps[state] = screamer.steps[state]+screamrange
-                    Scream(ants, i, state)
-                    if i.aim == state:
-                        i.takenav(screamer.pos)
-                        if showline == 1:
-                            pygame.draw.line(screen,(100*state,10,250-100*state),screamer.pos,i.pos)
+    def hungry(self,mod = 1):
+        if self.type == 0:
+            self.food += 1
+        self.food-=self.type*2
+def eat(arr,eater,food):
+    if 0<eater.type-food.type<3:
+        eater.food+=food.food/10
+        arr.remove(food)
 
+def dying(group):
+    for k in group:
+        if k.food<0:
+            group.remove(k)
+
+def tought(who1,who2):
+    if abs(who1.pos[0]-who2.pos[0])<who1.rad+who2.rad:
+        who2.pos[0]+= random.choice([-1,1]) * (who2.rad+who1.rad)
+    if abs(who1.pos[1]-who2.pos[1])<who1.rad+who2.rad:
+        who2.pos[1]+= random.choice([-1,1]) * (who2.rad+who1.rad)
+def birth(parent,group,num = 1):
+    if parent.food > 100 * (parent.type + 1):
+        foodie = parent.food/(num+1)
+        for j in range(0,num):
+            new = Creature(parent.pos,parent.color,parent.type,parent.rad,foodie,parent.speed)
+            if new.pos[0]<50: new.pos[0] = 50
+            if new.pos[0]> WIDTH-50: new.pos[0] = WIDTH-50
+            if new.pos[1]<50: new.pos[1] = 50
+            if new.pos[1]> HEIGHT-50: new.pos[1] = HEIGHT-50
+            group.append(new)
+        parent.food = foodie
 
 #Var's
 if RUN:
-    showline = 1
-    fmb = 0
-    screams = []
-    l = []
-    ints = []
-    home = Interespoint([WIDTH/2,HEIGHT/2],0)
-    home.pos = [random.randint(50,WIDTH-50),random.randint(50,HEIGHT-50)]
-    interesnum = 2
-    antnum = 500
-    #screamrange = 1/(80*antnum/(WIDTH*HEIGHT))
-    screamrange = 38
-    print(screamrange)
-    ants = []
-    for i in range(0,antnum):
-        CreateAnt(ants,[random.randint(50,WIDTH-50),random.randint(50,HEIGHT-50)],round(random.randint(-50,50)/50*1000)/1000*random.choice([-1,1]),random.choice([1,-1]),random.randint(500,1000)/1000)
-    for i in range(0,interesnum):
-        interes = Interespoint([random.randint(50,WIDTH-50),random.randint(50,HEIGHT-50)])
-        #interes.pos = [WIDTH/5*3,HEIGHT/2]
-        ints.append(interes)
+    plants = []
+    a = 0
+    crnum = 3
+    for i in range(crnum):
+        ne = Creature([random.randint(50,WIDTH-50),random.randint(50,HEIGHT-50)],[30,200,30],0,3,100,0)
+        plants.append(ne)
 
 
+
+pg.event.set_allowed([pg.QUIT, pg.KEYDOWN, pg.MOUSEBUTTONDOWN])
+scr.fill([0, 0, 0])
 #Game cicle
 while RUN:
     clock.tick(FPS)
 
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
+    for event in pg.event.get():
+        if event.type == pg.QUIT:
             RUN = False
-        if event.type == pygame.MOUSEBUTTONDOWN:
+        if event.type == pg.MOUSEBUTTONDOWN:
             if event.button == 1:
                 print(1)
-                counter = 0
-                for i in ants:
-                    if dist(i.pos,list(event.pos))<100:
-                        counter+=1
-                print(counter)
-                fmb = list(event.pos)
-                fmbrad = 100
             if event.button == 2:
                 print(2)
-                counter = 0
-                for i in ants:
-                    if dist(i.pos,list(event.pos))<screamrange:
-                        counter+=1
-                print(counter)
-                fmb = list(event.pos)
-                fmbrad = screamrange
             if event.button == 3:
                 print(3)
-                counter = 0
-                for i in ants:
-                    if dist(i.pos,list(event.pos))<10:
-                        counter+=1
-                print(counter)
-                fmb = list(event.pos)
-                fmbrad = 10
-            if event.button == 4:
-                screamrange+=1
-            if event.button == 5:
-                screamrange-=1
-        if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_d:
+        if event.type == pg.KEYDOWN:
+                if event.key == pg.K_d:
                     print("d")
-                    showline*=-1
-                if event.key == pygame.K_a:
+                if event.key == pg.K_a:
                     print("a")
-                if event.key == pygame.K_s:
+                if event.key == pg.K_s:
                     print("InteresNum = ",' ')
                     print("AntNum = ", ' ')
                     print("Food in home = ", ' ')
-                if event.key == pygame.K_w:
+                if event.key == pg.K_w:
                     print("w")
-                if event.key == pygame.K_g:
+                if event.key == pg.K_g:
                     print("g")
-
     screen.fill([0,0,0])
-    if fmb != 0:
-        pygame.draw.circle(screen, (255, 255, 0), fmb, fmbrad)
-        fmb = 0
-        fmbrad = 0
-    for i in ints:
-        pygame.draw.circle(screen, (0, 200, 200), i.pos, 10)
-    pygame.draw.circle(screen,(50,255,50),home.pos,15)
-    for i in ants:
-        if random.randint(0,antnum) == 6:
-            Scream(ants, i, random.choice([0,1]))
-        i.movetonav()
-        i.steps[0]+=1
-        i.steps[1]+=1
-        for k in range(0,4):
-            i.randnavchange()
 
-        if i.pos[0]< 50 or i.pos[0]>WIDTH-50:
-            i.nav = -i.nav
-        if i.pos[1]<50 or i.pos[1]>HEIGHT-50:
-            i.ymod = -i.ymod
-        for j in ints:
-            if dist(i.pos,j.pos)<10:
-                i.steps[1] = 0
-                Scream(ants, i, 1)
-                if  i.aim == 1:
-                    i.aim = 0
-                    i.color = (255,0,0)
-                    i.nav=-i.nav
-                    i.ymod*=-1
-        if dist(i.pos,home.pos)<15:
-            i.steps[0] = 0
-            Scream(ants, i, 0)
-            if  i.aim == 0:
-                i.aim = 1
-                i.color = (0,0,255)
-                i.nav = -i.nav
-                i.ymod *= -1
+    for i in plants:
+        if i.pos[0] < 50: i.pos[0] = 50
+        if i.pos[0] > WIDTH - 50: i.pos[0] = WIDTH - 50
+        if i.pos[1] < 50: i.pos[1] = 50
+        if i.pos[1] > HEIGHT - 50: i.pos[1] = HEIGHT - 50
         i.drow()
-    pygame.draw.line(screen,(200,20,100),(40,40),(WIDTH-40,40))
-    pygame.draw.line(screen, (200, 20, 100), (WIDTH-40, 40), (WIDTH - 40, HEIGHT-40))
-    pygame.draw.line(screen, (200, 20, 100), (WIDTH-40, HEIGHT-40), (40, HEIGHT-40))
-    pygame.draw.line(screen, (200, 20, 100), (40, 40), ( 40, HEIGHT-40))
-    pygame.display.flip()
+        i.hungry()
+        for j in plants:
+            if i!=j:
+                tought(i,j)
+        #if random.randint(0,10) == 7:
+    dying(plants)
+    buffer = plants[:]
+    for i in buffer:
+        birth(i,plants,1)
+    pg.draw.line(screen,(200,20,100),(40,40),(WIDTH-40,40))
+    pg.draw.line(screen, (200, 20, 100), (WIDTH-40, 40), (WIDTH - 40, HEIGHT-40))
+    pg.draw.line(screen, (200, 20, 100), (WIDTH-40, HEIGHT-40), (40, HEIGHT-40))
+    pg.draw.line(screen, (200, 20, 100), (40, 40), ( 40, HEIGHT-40))
+    pg.display.flip()
     ticks+=1
-    if ticks == FPS:
-        secunds+=1
+    if ticks == FPS/2:
+        secunds+=0.5
         ticks = 0
 
+
 print("time: ",secunds)
-pygame.quit()
+
+pg.quit()
