@@ -168,9 +168,9 @@ if RUN:
     home = Interespoint([WIDTH/2,HEIGHT/2],0)
     home.pos = [random.randint(50,WIDTH-50),random.randint(50,HEIGHT-50)]
     interesnum = 2
-    antnum = 500
+    antnum = 550
     #screamrange = 1/(80*antnum/(WIDTH*HEIGHT))
-    screamrange = 38
+    screamrange = 45
     print(screamrange)
     ants = []
     for i in range(0,antnum):

@@ -8,7 +8,7 @@ import time
 
 RUN = 1
 WIDTH = 1280
-HEIGHT = 950
+HEIGHT = 720
 FPS = 60
 ticks = 0
 secunds = 0

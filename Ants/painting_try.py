@@ -63,8 +63,8 @@ def CreateObj(mass,pos,type,sp,nav):
 
 
 #Global activity:
-ABSX = 0.1
-ABSY = 0.0
+ABSX = 0.02
+ABSY = -0.05
 
 go = 1
 painting = 1

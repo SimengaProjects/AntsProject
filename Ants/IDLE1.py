@@ -68,9 +68,12 @@ while RUN:
                 if event.key == pygame.K_a:
                     print("a")
                 if event.key == pygame.K_s:
+                    print("__________")
                     print("Copper = ",copper,' ')
                     print("income = ",copperIncome, ' ')
                     print("Level = ",mineLevel, ' ')
+                    print("Seconds =",seconds)
+                    print("__________")
                 if event.key == pygame.K_w:
                     print("w")
                 if event.key == pygame.K_g:
