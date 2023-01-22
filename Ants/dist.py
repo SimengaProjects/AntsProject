@@ -11,6 +11,7 @@ ticks = 0
 secunds = 0
 
 pygame.init()
+pygame.mixer.init()  # для звука
 screen = pygame.display.set_mode((WIDTH, HEIGHT),pygame.DOUBLEBUF)
 pygame.display.set_caption("My Game")
 clock = pygame.time.Clock()
@@ -23,14 +24,15 @@ screen.set_alpha(None)
 if RUN:
     startTime = time.time()
     seconds = 0
-    Coef = 1.2
-    range = 75
+    Coef = 1.9
+    rad = 75
     dot = [WIDTH/2,HEIGHT/2]
     dots = []
-    # for i in range(int(WIDTH/2)-100,int(WIDTH/2)+100):
-    #     for j in range(int(HEIGHT/2) - 100, int(HEIGHT/2) + 100):
-    #         if abs(abs(dot[0]-i)+abs(dot[1]-j)) / Coef < range :
-    #             dots.append([i,j])
+    for i in range(int(WIDTH/2)-100,int(WIDTH/2)+100):
+        for j in range(int(HEIGHT/2) - 100, int(HEIGHT/2) + 100):
+            if abs(abs(dot[0]-i)+abs(dot[1]-j)) / Coef < rad :
+                dots.append([i,j])
+
 
 
 #Game cicle
@@ -63,6 +65,7 @@ while RUN:
 
     screen.fill([0,0,0])
 
+    pygame.draw.circle(screen, (255, 0, 0), (WIDTH / 2, HEIGHT / 2),105)
     for i in dots:
         pygame.draw.circle(screen,(255,255,255),i,3)
 

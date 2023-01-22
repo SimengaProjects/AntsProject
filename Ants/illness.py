@@ -103,7 +103,7 @@ class Man:
 if RUN:
     ztime = time.time()
     hums = []
-    hnum = 800
+    hnum = 1000
     for i in range(hnum):
         man = Man([random.randint(50, WIDTH - 50), random.randint(50, HEIGHT - 50)], random.randint(0, 95), 0)
         hums.append(man)

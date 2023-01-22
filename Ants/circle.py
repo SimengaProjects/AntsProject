@@ -39,8 +39,7 @@ def findmaxindex(a):
 def dist(first,second):
     return( round((((first[1]-second[1])**2+(first[0]-second[0])**2)**0.5)*100)/100 )
 
-objCount = 0
-objects = []
+
 
 class Obj:
     def __init__(self,pos = [WIDTH/2,HEIGHT/2], type = 0,color = [255,255,255]):
@@ -64,6 +63,9 @@ class Obj:
         self.speed[0]-=x
         self.speed[1]-=y
 
+
+objCount = 500
+objects = []
 
 for i in range (0,objCount):
     x = random.randint(50,WIDTH-50)
